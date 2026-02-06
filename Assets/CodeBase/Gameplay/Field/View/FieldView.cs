@@ -1,4 +1,3 @@
-using System;
 using CodeBase.Gameplay.MVP;
 using UnityEngine;
 
