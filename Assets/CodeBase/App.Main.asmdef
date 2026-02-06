@@ -1,0 +1,26 @@
+{
+    "name": "App.Main",
+    "rootNamespace": "",
+    "references": [
+        "VContainer",
+        "UniTask",
+        "UniRx",
+        "Unity.TextMeshPro",
+        "spine-csharp",
+        "spine-unity",
+        "Unity.Purchasing",
+        "AppodealStack.Monetization.Api",
+        "AppodealStack.Monetization.Common",
+        "AppodealStack.Monetization.Platforms",
+        "AppodealStack.Monetization.Platforms.Android"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
