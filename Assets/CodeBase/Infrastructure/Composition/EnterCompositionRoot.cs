@@ -26,6 +26,7 @@ namespace CodeBase.Infrastructure.Composition
             _resolver.Resolve<MenuPresenter>().Attach();
             _resolver.Resolve<SettingsPresenter>().Attach();
            
+            _resolver.Resolve<WindowStateMachine>().Open(WindowType.Menu);
         }
 
         public void Dispose()

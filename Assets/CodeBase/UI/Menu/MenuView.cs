@@ -10,7 +10,7 @@ namespace CodeBase.UI.Menu
         [SerializeField] private Button _menuButton;
         [SerializeField] private Button _settingsButton;
 
-        public event Action MenuClicked;
+        public event Action PlayClicked;
         public event Action SettingsClicked;
 
         private void OnEnable()
@@ -29,7 +29,7 @@ namespace CodeBase.UI.Menu
                 _settingsButton.onClick.RemoveListener(OnSettingsButton);
         }
 
-        private void OnMenuButton() => MenuClicked?.Invoke();
+        private void OnMenuButton() => PlayClicked?.Invoke();
         private void OnSettingsButton() => SettingsClicked?.Invoke();
     }
 }

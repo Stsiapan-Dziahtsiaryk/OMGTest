@@ -10,12 +10,14 @@ namespace CodeBase.Infrastructure.LifetimeScopes
     {
         protected override void Configure(IContainerBuilder builder)
         {
+            // Views
             builder.RegisterComponentInHierarchy<MenuView>();
             builder.RegisterComponentInHierarchy<SettingsView>();
             
+            // Presenters
             builder.Register<MenuPresenter>(Lifetime.Singleton);
             builder.Register<SettingsPresenter>(Lifetime.Singleton);
-
+            
             builder.RegisterEntryPoint<EnterCompositionRoot>();
         }
     }

@@ -6,19 +6,18 @@ namespace CodeBase.Gameplay.Field
 {
     public class BlockView : MonoBehaviour
     {
-        public class Pool : MonoPool<BlockView>
+        [SerializeField] private SpriteRenderer _graphic;
+        [SerializeField] private Sprite[] _sprites;
+
+        public void SetBlock(int id)
         {
-            public Pool(
-                LifetimeScope container,
-                BlockView prefab,
-                int maxInstances = 10,
-                string parentName = "Parent of Pool")
-                : base(container, prefab, maxInstances, parentName)
+            if(id < 0)
             {
+                _graphic.sprite = null;
+                return;
             }
+            Debug.Log(id);
+            _graphic.sprite = _sprites[id];
         }
-        
-        
-        
     }
 }

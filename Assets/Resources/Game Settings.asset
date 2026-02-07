@@ -9,8 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 67238110c99c416a912aae6b122bd185, type: 3}
-  m_Name: Block
+  m_Script: {fileID: 11500000, guid: 3856759ae242407aba585b77a105c08d, type: 3}
+  m_Name: Game Settings
   m_EditorClassIdentifier: 
-  <ID>k__BackingField: 0
-  <Name>k__BackingField: Fire
+  <StartYPosition>k__BackingField: -8
+  <HorizontalMargin>k__BackingField: -2.5
+  <ReferenceSizeBlock>k__BackingField: 2

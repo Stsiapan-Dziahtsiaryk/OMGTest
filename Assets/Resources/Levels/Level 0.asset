@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: Level 0
   m_EditorClassIdentifier: 
   _id: 0
-  _gridSize: {x: 6, y: 8}
+  _gridSize: {x: 7, y: 3}
   _blocks:
   - {fileID: 11400000, guid: ad6c096cca3874ad1ae4c5a707d9cdbe, type: 2}
   - {fileID: 11400000, guid: fdd7414d929d545f884a9f53f9e58632, type: 2}
-  _grid: ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+  _grid: ffffffff01000000ffffffff010000000000000000000000ffffffffffffffff01000000ffffffff00000000ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff

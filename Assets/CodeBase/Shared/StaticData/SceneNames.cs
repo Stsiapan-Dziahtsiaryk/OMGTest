@@ -2,9 +2,8 @@
 {
     public static class SceneNames
     {
-        public const string Bootstrap = "Bootstrap Scene";
-        public const string Enter = "Enter Scene";
-        public const string Lobby = "Lobby Scene";
-        public const string Game = "Game Scene";
+        public const string Bootstrap = "BootstrapScene";
+        public const string Enter = "EnterScene";
+        public const string Game = "GameScene";
     }
 }

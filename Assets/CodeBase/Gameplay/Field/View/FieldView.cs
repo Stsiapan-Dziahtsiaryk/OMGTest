@@ -24,10 +24,9 @@ namespace CodeBase.Gameplay.Field
             Gizmos.color = Color.green;
             
             float cellSize = bounds / _gridSize.x;
-            
             for (int x = 0; x < _gridSize.x; x++)
             {
-                float xPos = -bounds / 2 + cellSize / 2 + x * cellSize;
+                float xPos = (-bounds + cellSize) / 2 + x * cellSize;
                 for (int y = 0; y < _gridSize.y; y++)
                 {
                     float yPos = _startYPosition + y * cellSize;

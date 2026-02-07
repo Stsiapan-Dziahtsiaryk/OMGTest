@@ -54,13 +54,13 @@ namespace CodeBase.Editor
                     Button blockBtn = new Button(() =>
                     {
                         OnSelectBlock(block.ID);    
-                        Debug.Log($"Block {block.ID}");
                     })
                     {
-                        text = $"Block {block.ID}"
+                        text = $"{block.ID} {block.Name}"
                     };
                     blockBtn.style.width = 40;
                     blockBtn.style.height = 40;
+                    blockBtn.style.fontSize = 10;
                     _blockPanel.Add(blockBtn);
                 }
             }
@@ -116,11 +116,11 @@ namespace CodeBase.Editor
                     
                     
                     int cellValue = grid.GetArrayElementAtIndex(index).intValue;
-
+                    
                     string message = $"Cell {x}-{y}";
                     var cell = new Button()
                     {
-                        text = cellValue > 0 ? $"{cellValue}" : "X"
+                        text = cellValue >= 0 ? $"{cellValue}" : "X"
                     };
                     cell.clicked += SetBlock;
                     cell.style.width = 40;
