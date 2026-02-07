@@ -1,3 +1,4 @@
+using CodeBase.Gameplay.Controller;
 using CodeBase.Gameplay.Field;
 using CodeBase.Gameplay.Field.Config;
 using CodeBase.Gameplay.Level;
@@ -25,6 +26,8 @@ namespace CodeBase.Infrastructure.LifetimeScopes
             // Services
             builder.Register<SceneService>(Lifetime.Singleton).AsImplementedInterfaces();
             builder.Register<WindowStateMachine>(Lifetime.Singleton);
+            builder.Register<GameStateMachine>(Lifetime.Singleton);
+            
             // Game services & models 
             builder.Register<FieldModel>(Lifetime.Singleton);
             builder.Register<LevelBuilder>(Lifetime.Singleton);

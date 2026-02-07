@@ -20,8 +20,9 @@ namespace CodeBase.Gameplay.Field
         
         [SerializeField] private BlockView _blockView;
 
-        public void SetBlock(int type)
+        public void SetBlock(int id, int type)
         {
+            _blockView.SetLayer(id);
             _blockView.SetBlock(type);
         }
     }

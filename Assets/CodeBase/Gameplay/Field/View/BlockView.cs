@@ -16,8 +16,12 @@ namespace CodeBase.Gameplay.Field
                 _graphic.sprite = null;
                 return;
             }
-            Debug.Log(id);
             _graphic.sprite = _sprites[id];
+        }
+
+        public void SetLayer(int layer)
+        {
+            _graphic.sortingOrder = layer;
         }
     }
 }

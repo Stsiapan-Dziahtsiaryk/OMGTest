@@ -23,20 +23,17 @@ namespace CodeBase.UI.Menu
         
         protected override void OnAttach()
         {
+            base.OnAttach();
             View.PlayClicked += OnPlayClicked;
             View.SettingsClicked += OnSettingsClicked;
-            
-            Window.Opened += OnWindowOpened;
-            Window.Closed += OnWindowClosed;
         }
 
         protected override void OnDetach()
         {
+            base.OnDetach();
             View.PlayClicked -= OnPlayClicked;
             View.SettingsClicked -= OnSettingsClicked;
             
-            Window.Opened -= OnWindowOpened;
-            Window.Closed -= OnWindowClosed;
         }
 
         protected override void OnDispose()
@@ -52,8 +49,5 @@ namespace CodeBase.UI.Menu
         {
             _windowStateMachine.Open(WindowType.Settings);
         }
-
-        private void OnWindowOpened() => View.Show();
-        private void OnWindowClosed() => View.Hide();
     }
 }

@@ -19,6 +19,12 @@ namespace CodeBase.Gameplay.Level
             _fieldModel = fieldModel ?? throw new ArgumentNullException(nameof(fieldModel));
             _camera = Camera.main;
         }
+
+        public void Rebuild(LevelConfig config)
+        {
+            _fieldModel.ChangeState(FieldState.Rebuilding);
+            Build(config);
+        }
         
         public void Build(LevelConfig config)
         {
@@ -38,7 +44,7 @@ namespace CodeBase.Gameplay.Level
                 {
                     int index = y * config.GridSize.x + x;
                     Vector2 position = new Vector2((-bounds + size) / 2 + x * size, yPos);
-                    Cell cell = new Cell(config.Grid[index], position);
+                    Cell cell = new Cell(index, config.Grid[index], position);
                     grid[index] = cell;
                 }
             }

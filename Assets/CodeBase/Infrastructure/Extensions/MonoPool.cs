@@ -40,10 +40,10 @@ namespace CodeBase.Infrastructure.Extensions
 
         public virtual void Despawn(T obj)
         {
+            if (obj.gameObject.activeSelf)
+                obj.transform.SetParent(_parent, false);
             obj.gameObject.SetActive(false);
             obj.transform.position = Vector3.zero;
-            if(obj.gameObject.activeSelf)
-                obj.transform.SetParent(_parent, false);
             _spawnedInstances.Remove(obj);
             _instances.Enqueue(obj);
         }
@@ -51,11 +51,22 @@ namespace CodeBase.Infrastructure.Extensions
         public void DespawnAll()
         {
             foreach (T instance in _spawnedInstances)
-                _instances.Enqueue(instance);
+            {
+                DespawnAll(instance);
+            }
 
             _spawnedInstances.Clear();
         }
-
+        
+        protected virtual void DespawnAll(T instance)
+        {
+            if (instance.gameObject.activeSelf)
+                instance.transform.SetParent(_parent, false);
+            instance.gameObject.SetActive(false);
+            instance.transform.position = Vector3.zero;
+            _instances.Enqueue(instance);
+        }
+        
         protected virtual void CreateInstances()
         {
             for (int i = 0; i < _maxInstances; i++)

@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: df9b21960e774f7f828e1fc3581f3dd7, type: 3}
+  m_Name: Level 2
+  m_EditorClassIdentifier: 
+  _id: 2
+  _gridSize: {x: 6, y: 6}
+  _blocks:
+  - {fileID: 11400000, guid: ad6c096cca3874ad1ae4c5a707d9cdbe, type: 2}
+  - {fileID: 11400000, guid: fdd7414d929d545f884a9f53f9e58632, type: 2}
+  _grid: ffffffff01000000000000000100000001000000ffffffffffffffff01000000000000000100000001000000ffffffffffffffff00000000010000000000000000000000ffffffffffffffff0100000001000000ffffffff01000000ffffffffffffffff0100000000000000ffffffffffffffffffffffffffffffffffffffff01000000ffffffffffffffffffffffff

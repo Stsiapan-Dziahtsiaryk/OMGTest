@@ -2,6 +2,7 @@ using CodeBase.Gameplay.Field;
 using CodeBase.Gameplay.Field.Config;
 using CodeBase.Infrastructure.Composition;
 using CodeBase.Infrastructure.Extensions;
+using CodeBase.UI.HUD;
 using UnityEngine;
 using VContainer;
 using VContainer.Unity;
@@ -20,9 +21,11 @@ namespace CodeBase.Infrastructure.LifetimeScopes
             
             // Views
             builder.RegisterComponentInHierarchy<FieldView>();
+            builder.RegisterComponentInHierarchy<HUDView>();
             
             // Presenters
             builder.Register<FieldPresenter>(Lifetime.Singleton);
+            builder.Register<HUDPresenter>(Lifetime.Singleton);
 
             builder.RegisterEntryPoint<GameCompositionRoot>();
         }

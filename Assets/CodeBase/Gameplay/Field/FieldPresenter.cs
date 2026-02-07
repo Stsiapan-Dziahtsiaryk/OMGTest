@@ -45,6 +45,9 @@ namespace CodeBase.Gameplay.Field
                     break;
                 case FieldState.Normalize:
                     break;
+                case FieldState.Rebuilding:
+                    ClearGrid();
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(state), state, null);
             }
@@ -60,10 +63,15 @@ namespace CodeBase.Gameplay.Field
                 
                 view.transform.localPosition = cell.Position;
                 view.transform.localScale = scale;
-                view.SetBlock(cell.Type);
+                view.SetBlock(cell.ID, cell.Type);
             }
 
             _model.ChangeState(FieldState.Ready);
+        }
+        
+        private void ClearGrid()
+        {
+            _cellPool.DespawnAll();
         }
     }
 }

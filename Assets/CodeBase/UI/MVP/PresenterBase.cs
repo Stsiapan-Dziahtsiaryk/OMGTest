@@ -33,8 +33,17 @@ namespace CodeBase.UI.MVP
             OnDetach();
         }
 
-        protected virtual void OnAttach() { }
-        protected virtual void OnDetach() { }
+        protected virtual void OnAttach()
+        {
+            Window.Opened += HandleShow;
+            Window.Closed += HandleHide;
+        }
+
+        protected virtual void OnDetach()
+        {
+            Window.Opened -= HandleShow;
+            Window.Closed -= HandleHide;
+        }
 
         public virtual void Dispose()
         {

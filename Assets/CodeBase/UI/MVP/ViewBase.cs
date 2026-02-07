@@ -16,7 +16,8 @@ namespace CodeBase.UI.MVP
 
         private void OnValidate()
         {
-            if(!_canvasGroup) _canvasGroup = GetComponent<CanvasGroup>();
+            if(!_canvasGroup) 
+                _canvasGroup = GetComponent<CanvasGroup>();
         }
 
         public virtual void Show()
