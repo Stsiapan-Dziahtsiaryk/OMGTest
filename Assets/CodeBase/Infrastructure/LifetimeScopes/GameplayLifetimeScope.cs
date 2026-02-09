@@ -1,5 +1,5 @@
+using CodeBase.Gameplay.Controller;
 using CodeBase.Gameplay.Field;
-using CodeBase.Gameplay.Field.Config;
 using CodeBase.Infrastructure.Composition;
 using CodeBase.Infrastructure.Extensions;
 using CodeBase.UI.HUD;
@@ -28,6 +28,7 @@ namespace CodeBase.Infrastructure.LifetimeScopes
             builder.Register<HUDPresenter>(Lifetime.Singleton);
 
             builder.RegisterEntryPoint<GameCompositionRoot>();
+            builder.RegisterEntryPoint<InputService>().AsSelf();
         }
     }
 }

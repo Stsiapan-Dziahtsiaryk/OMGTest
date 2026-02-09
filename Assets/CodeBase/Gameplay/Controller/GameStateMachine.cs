@@ -1,7 +1,6 @@
 using System;
 using CodeBase.Gameplay.Level;
 using R3;
-using VContainer.Unity;
 
 namespace CodeBase.Gameplay.Controller
 {

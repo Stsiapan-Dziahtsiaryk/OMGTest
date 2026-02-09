@@ -35,7 +35,7 @@ namespace CodeBase.Gameplay.Level
             float size = bounds / config.GridSize.x;
             float scale = size / _settings.ReferenceSizeBlock;
 
-            Cell[] grid = new Cell[config.GridSize.x * config.GridSize.y];
+            Cell[,] gridArray = new Cell[config.GridSize.x, config.GridSize.y];
             
             for (int y = 0; y < config.GridSize.y; y++)
             {
@@ -44,12 +44,12 @@ namespace CodeBase.Gameplay.Level
                 {
                     int index = y * config.GridSize.x + x;
                     Vector2 position = new Vector2((-bounds + size) / 2 + x * size, yPos);
-                    Cell cell = new Cell(index, config.Grid[index], position);
-                    grid[index] = cell;
+                    Cell cell = new Cell(config.Grid[index], position);
+                    gridArray[x, y] = cell;
                 }
             }
             
-            _fieldModel.Initialize(scale, grid);
+            _fieldModel.Initialize(scale, gridArray);
         }
     }
 }

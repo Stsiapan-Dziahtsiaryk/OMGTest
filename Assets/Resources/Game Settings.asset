@@ -16,3 +16,7 @@ MonoBehaviour:
   <HorizontalMargin>k__BackingField: -2.5
   <ReferenceSizeBlock>k__BackingField: 1.95
   <ReferenceHMargin>k__BackingField: 0.5
+  <Configs>k__BackingField:
+  - {fileID: 11400000, guid: 91fcfa715923247339012bd87c818274, type: 2}
+  - {fileID: 11400000, guid: 0f870ca4d3bed4ffbb3c209383c4f643, type: 2}
+  - {fileID: 11400000, guid: 85b3ae5d9d60349de8f08a7f2d6c9f21, type: 2}
