@@ -1,6 +1,5 @@
-using CodeBase.Infrastructure.Extensions;
+using System;
 using UnityEngine;
-using VContainer.Unity;
 
 namespace CodeBase.Gameplay.Field
 {
@@ -9,7 +8,7 @@ namespace CodeBase.Gameplay.Field
         [SerializeField] private SpriteRenderer _graphic;
         [SerializeField] private Sprite[] _sprites;
 
-        public void SetBlock(int id)
+        public void SetBlock(int id, Action callback = null)
         {
             if(id < 0)
             {
@@ -17,6 +16,7 @@ namespace CodeBase.Gameplay.Field
                 return;
             }
             _graphic.sprite = _sprites[id];
+            callback?.Invoke();
         }
 
         public void SetLayer(int layer)

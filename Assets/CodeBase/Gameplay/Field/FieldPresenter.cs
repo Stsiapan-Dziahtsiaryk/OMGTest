@@ -116,6 +116,7 @@ namespace CodeBase.Gameplay.Field
 
                     view.SetBlock(new Vector2Int(x,y), cell.Type);
                     view.Selecting += _model.OnSelectCell;
+                    view.Callback += _model.OnDoNextCellAction;
                     cell.Changed += view.HandleState;
                 }
             }

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace CodeBase.Gameplay.Field
@@ -12,6 +13,8 @@ namespace CodeBase.Gameplay.Field
             Destroy = 2,
         }
         
+        private Queue<CellDto> _actionQueue = new Queue<CellDto>();
+        
         public Cell(int type, Vector2 position)
         {
             Type = type;
@@ -23,11 +26,23 @@ namespace CodeBase.Gameplay.Field
 
         public event Action<CellDto> Changed;
 
+        public void SetAction(CellDto data)
+        {
+            _actionQueue.Enqueue(data);
+        }
+        
         public void Change(CellDto data)
         {
             Type = data.Type;
             Position = data.Position;
             Changed?.Invoke(data);
+        }
+
+        public void NextAction()
+        {
+            if (_actionQueue.Count == 0) return;
+            var action = _actionQueue.Dequeue();
+            Change(action);
         }
     }
 }

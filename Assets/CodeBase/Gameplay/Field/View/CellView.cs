@@ -23,7 +23,8 @@ namespace CodeBase.Gameplay.Field
         
         public Vector2Int ID { get; private set; }
 
-        public Action<Vector2Int> Selecting;
+        public event Action<Vector2Int> Selecting;
+        public event Action Callback;
         
         public void SetBlock(Vector2Int id, int type)
         {
@@ -45,14 +46,16 @@ namespace CodeBase.Gameplay.Field
                 case Cell.State.Invalid:
                     break;
                 case Cell.State.Move:
-                    _blockView.SetBlock(data.Type);
+                    _blockView.SetBlock(data.Type, HandleFinishAction);
                     break;
                 case Cell.State.Destroy:
-                    
+                    _blockView.SetBlock(data.Type, HandleFinishAction);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
         }
+        
+        private void HandleFinishAction() => Callback?.Invoke();
     }
 }
