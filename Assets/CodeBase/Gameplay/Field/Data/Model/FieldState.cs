@@ -2,13 +2,15 @@ using System;
 
 namespace CodeBase.Gameplay.Field
 {
-    [Flags]
     public enum FieldState
     {
         Invalid = 0,
-        Ready = 1 << 1,
-        Building = 1 << 2,
-        Normalize = 1 << 3,
-        Rebuilding = 1 << 4,
+        Ready = 1,
+        Building = 2,
+        Normalize = 3, // divided into 2 states: Gravity and Matches 
+        Gravity = 4,
+        Matches = 5,
+        Selection = 6,
+        Rebuilding,
     }
 }

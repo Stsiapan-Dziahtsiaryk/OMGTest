@@ -12,6 +12,7 @@ namespace CodeBase.Gameplay.Level
         [field: SerializeField] public float ReferenceHMargin { get; private set; }
         
         // ToDo: we should get it from the json file
-        [field: SerializeField] public LevelConfig[] Configs { get; private set; }
+        [field: SerializeField] public LevelConfig[] LevelConfigs { get; private set; }
+        [field: SerializeField] public BlockConfig[] BlockConfigs { get; private set; }
     }
 }

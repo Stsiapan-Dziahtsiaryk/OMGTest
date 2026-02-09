@@ -5,7 +5,8 @@
         "VContainer",
         "UniTask",
         "R3.Unity",
-        "Unity.TextMeshPro"
+        "Unity.TextMeshPro",
+        "DOTween.Modules"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

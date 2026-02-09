@@ -44,21 +44,20 @@ namespace CodeBase.Gameplay.Field
         
         private void OnSwipe(int direction)
         {
-            Debug.Log($"Swipe direction: {direction}");
             Vector2Int offset = Vector2Int.zero;
             switch (direction)
             {
                 case 1: // Up
-                    offset = new Vector2Int(0, 1);
+                    offset = Vector2Int.up;
                     break;
                 case 2: // Down
-                    offset = new Vector2Int(0, -1);
+                    offset = Vector2Int.down;
                     break;
                 case 3: // Left
-                    offset = new Vector2Int(-1, 0);
+                    offset = Vector2Int.left;
                     break;
                 case 4: // Right
-                    offset = new Vector2Int(1, 0);
+                    offset = Vector2Int.right;
                     break;
             }
             _model.MoveCell(offset);
@@ -87,22 +86,27 @@ namespace CodeBase.Gameplay.Field
                 case FieldState.Ready:
                     break;
                 case FieldState.Building:
-                    RebuildGrid();
+                    BuildGrid();
                     break;
                 case FieldState.Normalize:
                     break;
                 case FieldState.Rebuilding:
                     ClearGrid();
                     break;
+                case FieldState.Gravity:
+                    break;
+                case FieldState.Matches:
+                    break;
+                case FieldState.Selection:
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(state), state, null);
             }
         }
         
-        private void RebuildGrid()
+        private void BuildGrid()
         {
             Vector3 scale = new Vector3(_model.Scale, _model.Scale, 1);
-
             for (int y = 0; y < _model.Size.y; y++)
             {
                 for (int x = 0; x < _model.Size.x; x++)
@@ -122,7 +126,7 @@ namespace CodeBase.Gameplay.Field
             }
             _model.ChangeState(FieldState.Ready);
         }
-        
+
         private void ClearGrid()
         {
             _cellPool.DespawnAll();

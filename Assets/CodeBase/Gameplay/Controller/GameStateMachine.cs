@@ -25,21 +25,21 @@ namespace CodeBase.Gameplay.Controller
         public void HandleNewGame()
         {
             _state.Value = GameState.Play;
-            _builder.Build(_settings.Configs[_currentLevel]);
+            _builder.Build(_settings.LevelConfigs[_currentLevel]);
         }
 
         public void RestartLevel()
         {
             _state.Value = GameState.Restart;
-            _builder.Rebuild(_settings.Configs[_currentLevel]);
+            _builder.Rebuild(_settings.LevelConfigs[_currentLevel]);
         }
         
         public void NextLevel()
         {
             _state.Value = GameState.End;
             int old = _currentLevel;
-            _currentLevel = (old + 1) % _settings.Configs.Length;
-            _builder.Rebuild(_settings.Configs[_currentLevel]);
+            _currentLevel = (old + 1) % _settings.LevelConfigs.Length;
+            _builder.Rebuild(_settings.LevelConfigs[_currentLevel]);
         }
     }
 }

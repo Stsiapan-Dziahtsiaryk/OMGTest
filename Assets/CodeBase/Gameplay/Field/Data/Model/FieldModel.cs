@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using R3;
 using UnityEngine;
 
@@ -33,11 +32,16 @@ namespace CodeBase.Gameplay.Field
         public void OnSelectCell(Vector2Int id)
         {
             if (_grid[id.x, id.y].Type != -1)
+            {
                 _selectedCell = id;
+                _state.Value = FieldState.Selection;
+            }
         }
 
         public void MoveCell(Vector2Int offset)
         {
+            if (_state.Value != FieldState.Selection) return;
+
             var index = _selectedCell + offset;
             bool isUp = offset.y == 1 && _grid[index.x, index.y].Type == -1;
 
@@ -55,8 +59,6 @@ namespace CodeBase.Gameplay.Field
 
             _grid[_selectedCell.x, _selectedCell.y].Change(swap);
             _grid[index.x, index.y].Change(select);
-
-            NormalizeGrid();
         }
 
         public Cell GetCell(int x, int y) => _grid[x, y];
@@ -64,15 +66,14 @@ namespace CodeBase.Gameplay.Field
         public void ChangeState(FieldState state)
             => _state.Value = state;
 
-        
-        public void OnDoNextCellAction()
+
+        public void OnDoNextCellAction(Vector2Int id)
         {
-            foreach (Cell cell in _grid)
-            {
-                cell.NextAction();
-            }
+            GetCell(id.x, id.y).SetState(Cell.State.Idle);
+
+            Normalize();
         }
-        
+
         private bool CanSwap(Vector2Int swapTarget)
         {
             bool isValid =
@@ -83,7 +84,22 @@ namespace CodeBase.Gameplay.Field
 
             return isValid;
         }
-        
+
+        public void Normalize()
+        {
+            _state.Value = FieldState.Normalize;
+
+            if (IsAllCellsIdle() == false) return;
+
+            Gravity();
+            if (_state.Value == FieldState.Gravity) return;
+
+            FindMatches();
+            if (_state.Value == FieldState.Matches) return;
+
+            _state.Value = FieldState.Ready;
+        }
+
         private void Gravity()
         {
             for (int x = 0; x < Size.x; x++)
@@ -97,15 +113,18 @@ namespace CodeBase.Gameplay.Field
                         {
                             int movingType = _grid[x, y].Type;
 
-                            _grid[x, writeY].Change(new CellDto(
-                                movingType,
-                                _grid[x, writeY].Position,
-                                Cell.State.Move));
+                            _grid[x, writeY]
+                                .Change(new CellDto(
+                                    movingType,
+                                    _grid[x, y].Position,
+                                    Cell.State.Move));
 
-                            _grid[x, y].Change(new CellDto(
-                                -1,
-                                _grid[x, y].Position,
-                                Cell.State.Move));
+                            _grid[x, y]
+                                .Change(new CellDto(
+                                    -1,
+                                    _grid[x, writeY].Position,
+                                    Cell.State.Move));
+                            _state.Value = FieldState.Gravity;
                         }
 
                         writeY++;
@@ -114,81 +133,84 @@ namespace CodeBase.Gameplay.Field
             }
         }
 
-        private void NormalizeGrid()
+        private void FindMatches()
         {
-            _state.Value = FieldState.Normalize;
-            Gravity();
-            
-            bool anyDestroyed;
-            do
+            bool[,] toDestroy = new bool[Size.x, Size.y];
+
+            for (int y = 0; y < Size.y; y++)
             {
-                bool[,] toDestroy = new bool[Size.x, Size.y];
-                anyDestroyed = false;
-
-                for (int y = 0; y < Size.y; y++)
+                int runStart = 0;
+                while (runStart < Size.x)
                 {
-                    int runStart = 0;
-                    while (runStart < Size.x)
+                    int t = _grid[runStart, y].Type;
+                    int runEnd = runStart + 1;
+                    while (runEnd < Size.x &&
+                           _grid[runEnd, y].Type == t &&
+                           t != -1)
+                        runEnd++;
+
+                    int runLength = runEnd - runStart;
+                    if (t != -1 && runLength >= 3)
                     {
-                        int t = _grid[runStart, y].Type;
-                        int runEnd = runStart + 1;
-                        while (runEnd < Size.x && _grid[runEnd, y].Type == t && t != -1)
-                            runEnd++;
-
-                        int runLength = runEnd - runStart;
-                        if (t != -1 && runLength >= 3)
-                        {
-                            for (int x = runStart; x < runEnd; x++)
-                                toDestroy[x, y] = true;
-                        }
-
-                        runStart = runEnd;
+                        for (int x = runStart; x < runEnd; x++)
+                            toDestroy[x, y] = true;
                     }
-                }
 
+                    runStart = runEnd;
+                }
+            }
+
+            for (int x = 0; x < Size.x; x++)
+            {
+                int runStart = 0;
+                while (runStart < Size.y)
+                {
+                    int t = _grid[x, runStart].Type;
+                    int runEnd = runStart + 1;
+                    while (runEnd < Size.y &&
+                           _grid[x, runEnd].Type == t &&
+                           t != -1)
+                        runEnd++;
+
+                    int runLength = runEnd - runStart;
+                    if (t != -1 && runLength >= 3)
+                    {
+                        for (int y = runStart; y < runEnd; y++)
+                            toDestroy[x, y] = true;
+                    }
+
+                    runStart = runEnd;
+                }
+            }
+
+            for (int y = 0; y < Size.y; y++)
+            {
                 for (int x = 0; x < Size.x; x++)
                 {
-                    int runStart = 0;
-                    while (runStart < Size.y)
+                    if (toDestroy[x, y])
                     {
-                        int t = _grid[x, runStart].Type;
-                        int runEnd = runStart + 1;
-                        while (runEnd < Size.y && _grid[x, runEnd].Type == t && t != -1)
-                            runEnd++;
-
-                        int runLength = runEnd - runStart;
-                        if (t != -1 && runLength >= 3)
-                        {
-                            for (int y = runStart; y < runEnd; y++)
-                                toDestroy[x, y] = true;
-                        }
-
-                        runStart = runEnd;
+                        _state.Value = FieldState.Matches;
+                        Debug.Log($"Destroying cell at ({x}, {y})");
+                        _grid[x, y].Change(new CellDto(
+                            -1,
+                            _grid[x, y].Position,
+                            Cell.State.Destroy));
                     }
                 }
+            }
+        }
 
-                for (int y = 0; y < Size.y; y++)
-                {
-                    for (int x = 0; x < Size.x; x++)
-                    {
-                        if (toDestroy[x, y])
-                        {
-                            anyDestroyed = true;
-                            _grid[x, y].Change(new CellDto(
-                                -1,
-                                _grid[x, y].Position,
-                                Cell.State.Destroy));
-                        }
-                    }
-                }
+        public bool IsAllCellsIdle()
+        {
+            bool isIdle = false;
 
-                if (anyDestroyed)
-                {
-                    Gravity();
-                }
-            } while (anyDestroyed);
+            foreach (var cell in _grid)
+            {
+                isIdle = cell.CurrentState == Cell.State.Idle;
+                if (isIdle == false) break;
+            }
 
-            _state.Value = FieldState.Ready;
+            return isIdle;
         }
     }
 }

@@ -97,7 +97,7 @@ Animator:
   m_GameObject: {fileID: 2373122941097048003}
   m_Enabled: 0
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: f5c78b361d31f4bc69c3c0ca61622e40, type: 2}
+  m_Controller: {fileID: 9100000, guid: 2156ae1e896264b88baea56e13aa62f1, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -139,3 +139,4 @@ MonoBehaviour:
   _sprites:
   - {fileID: 21300000, guid: f79522d82c2224ef0b98cb0844c7aa86, type: 3}
   - {fileID: 21300000, guid: 9058c949835f347528d5b4e9078fdaec, type: 3}
+  _animator: {fileID: 3381457610696598306}

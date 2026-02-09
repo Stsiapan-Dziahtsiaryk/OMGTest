@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace CodeBase.Gameplay.Field
@@ -9,11 +8,13 @@ namespace CodeBase.Gameplay.Field
         public enum State
         {
             Invalid = 0,
-            Move = 1,
-            Destroy = 2,
+            Idle = 1,
+            Move = 2,
+            Destroy = 3,
         }
         
-        private Queue<CellDto> _actionQueue = new Queue<CellDto>();
+        private State _state = State.Idle;
+        private CellDto _cashedAction;
         
         public Cell(int type, Vector2 position)
         {
@@ -23,26 +24,20 @@ namespace CodeBase.Gameplay.Field
 
         public int Type { get; private set; }
         public Vector2 Position { get; private set; }
-
+        public State CurrentState => _state;
         public event Action<CellDto> Changed;
-
-        public void SetAction(CellDto data)
-        {
-            _actionQueue.Enqueue(data);
-        }
         
         public void Change(CellDto data)
         {
             Type = data.Type;
-            Position = data.Position;
+            // Position = data.Position;
+            _state = data.State;
             Changed?.Invoke(data);
         }
 
-        public void NextAction()
+        public void SetState(State newState)
         {
-            if (_actionQueue.Count == 0) return;
-            var action = _actionQueue.Dequeue();
-            Change(action);
+            _state = newState;
         }
     }
 }
