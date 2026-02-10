@@ -133,7 +133,12 @@ namespace CodeBase.Gameplay.Field
                     view.transform.localPosition = cell.Position;
                     view.transform.localScale = scale;
 
-                    view.SetBlock(new Vector2Int(x,y), cell.Type);
+                    AnimationClip[] clips = null;
+                    clips = cell.Type == -1 ? null : _gameSettings.BlockConfigs[cell.Type].Animations;
+                        
+                    
+                    view.Initialize(new Vector2Int(x, y), clips);
+                    // view.Initialize(new Vector2Int(x,y), cell.Type);
                     view.Selecting += _model.OnSelectCell;
                     view.Callback += cell.SetState;
                     cell.Changed += view.HandleState;

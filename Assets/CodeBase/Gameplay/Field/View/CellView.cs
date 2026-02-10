@@ -35,12 +35,24 @@ namespace CodeBase.Gameplay.Field
         public event Action<Vector2Int> Selecting;
         public event Action<Vector2Int> Callback;
 
+        private void OnEnable()
+        {
+            _blockView.Destroyed += HandleFinishAction;
+        }
+
         private void OnDisable()
         {
+            _blockView.Destroyed -= HandleFinishAction;
             _tween?.Kill();
         }
 
-        public void SetBlock(Vector2Int id, int type)
+        public void Initialize(Vector2Int id, AnimationClip[] clips)
+        {
+            ID = id;
+            _blockView.Initialize(id.x * (id.y + 1), clips);
+        }
+        
+        public void Initialize(Vector2Int id, int type)
         {
             ID = id;
             _blockView.SetLayer(id.x * (id.y + 1));
@@ -49,28 +61,24 @@ namespace CodeBase.Gameplay.Field
 
         public void Selected()
         {
-            Debug.Log($"Selected {ID}");
             Selecting?.Invoke(ID);
         }
 
         public void HandleState(CellDto data)
         {
-            // ID = data.GridPosition;
             switch (data.State)
             {
                 case Cell.State.Invalid:
                     break;
                 case Cell.State.Move:
-                    Debug.Log($"Moving {ID} to {data.Position}");
                     Moving(data);
                     break;
                 case Cell.State.Destroy:
+                    Debug.Log($"Destroy {ID.x}");
                     _blockView.DestroyBlock(HandleFinishAction);
-                    // HandleFinishAction();
                     break;
                 case Cell.State.Idle:
-                    // _blockView.SetBlock(data.Type);
-                    Debug.Log($"Idle {ID}");
+                    Debug.Log($"Idle {ID.x}");
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
@@ -93,7 +101,6 @@ namespace CodeBase.Gameplay.Field
                     .OnKill(() =>
                     {
                         ID = data.GridPosition;
-                        Debug.Log($"Moving finished {ID}");
                         Callback?.Invoke(data.GridPosition);
                     });
         }

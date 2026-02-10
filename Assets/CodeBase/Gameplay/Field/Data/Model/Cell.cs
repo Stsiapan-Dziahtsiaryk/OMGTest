@@ -39,7 +39,16 @@ namespace CodeBase.Gameplay.Field
         {
             _state = State.Idle;
         }
-        
-        
+
+        public void SetState(State state)
+        {
+            _state = state;
+        }
+
+        public void Destroy()
+        {
+            var data = new CellDto(Vector2Int.zero, -1, Vector2.zero, State.Destroy);
+            Changed?.Invoke(data);
+        }
     }
 }
