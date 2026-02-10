@@ -5,16 +5,19 @@ namespace CodeBase.Gameplay.Field
     public readonly struct CellDto
     {
         // Какой тип блока после перемещения будет
+        public readonly Vector2Int GridPosition;
         public readonly int Type;
         // В какую сторону перемещение 
         public readonly Vector2 Position;
         public readonly Cell.State State;
         
         public CellDto(
+            Vector2Int gridPosition,
             int type,
             Vector2 position,
             Cell.State state)
         {
+            GridPosition = gridPosition;
             Type = type;
             Position = position;
             State = state;

@@ -30,14 +30,16 @@ namespace CodeBase.Gameplay.Field
         public void Change(CellDto data)
         {
             Type = data.Type;
-            // Position = data.Position;
+            Position = data.Position;
             _state = data.State;
             Changed?.Invoke(data);
         }
-
-        public void SetState(State newState)
+        
+        public void SetState(Vector2Int id)
         {
-            _state = newState;
+            _state = State.Idle;
         }
+        
+        
     }
 }

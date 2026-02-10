@@ -49,16 +49,19 @@ namespace CodeBase.Gameplay.Field
 
         public void Selected()
         {
+            Debug.Log($"Selected {ID}");
             Selecting?.Invoke(ID);
         }
 
         public void HandleState(CellDto data)
         {
+            // ID = data.GridPosition;
             switch (data.State)
             {
                 case Cell.State.Invalid:
                     break;
                 case Cell.State.Move:
+                    Debug.Log($"Moving {ID} to {data.Position}");
                     Moving(data);
                     break;
                 case Cell.State.Destroy:
@@ -66,7 +69,8 @@ namespace CodeBase.Gameplay.Field
                     // HandleFinishAction();
                     break;
                 case Cell.State.Idle:
-                    _blockView.SetBlock(data.Type);
+                    // _blockView.SetBlock(data.Type);
+                    Debug.Log($"Idle {ID}");
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
@@ -81,27 +85,17 @@ namespace CodeBase.Gameplay.Field
         private void Moving(CellDto data)
         {
             _tween?.Kill();
-            
-            if (data.Type == -1)
-            {
-                _blockView.SetBlock(data.Type, HandleFinishAction);
-            }
-            else
-            {
-                Vector3 defaultPos = _blockView.transform.localPosition; 
-                var target = (Vector3)data.Position - transform.position;
-                _blockView.transform.localPosition += target; 
-                _blockView.SetBlock(data.Type);
-                
-                _tween =
-                    _blockView 
-                        .transform
-                        .DOLocalMove(defaultPos, 0.25f)
-                        .OnKill(() =>
-                        {
-                            HandleFinishAction();
-                        });    
-            }
+            _blockView.SetLayer(data.GridPosition.x * (data.GridPosition.y + 1));
+
+            _tween =
+                transform
+                    .DOLocalMove(data.Position, 0.25f)
+                    .OnKill(() =>
+                    {
+                        ID = data.GridPosition;
+                        Debug.Log($"Moving finished {ID}");
+                        Callback?.Invoke(data.GridPosition);
+                    });
         }
     }
 }
