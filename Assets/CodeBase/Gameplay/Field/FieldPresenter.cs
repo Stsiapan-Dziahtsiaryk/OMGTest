@@ -1,6 +1,8 @@
 using System;
 using CodeBase.Gameplay.Controller;
+using CodeBase.Gameplay.Level;
 using CodeBase.Gameplay.MVP;
+using Cysharp.Threading.Tasks;
 using R3;
 using UnityEngine;
 using Vector3 = UnityEngine.Vector3;
@@ -12,19 +14,24 @@ namespace CodeBase.Gameplay.Field
         private readonly FieldModel _model;
         private readonly CellView.Pool _cellPool;
         private readonly InputService _inputService;
+
+        private readonly GameSettings _gameSettings;
         
         private Camera _camera;
         private CellView _selectedCell;
-        
+        private UniTask _runningNormalize = UniTask.CompletedTask;
+
         public FieldPresenter(
             FieldView view,
             FieldModel model, 
             CellView.Pool cellPool,
-            InputService inputService) : base(view)
+            InputService inputService,
+            GameSettings gameSettings) : base(view)
         {
             _model = model ?? throw new ArgumentNullException(nameof(model));
             _cellPool = cellPool ?? throw new ArgumentNullException(nameof(cellPool));
             _inputService = inputService ?? throw new ArgumentNullException(nameof(inputService));
+            _gameSettings = gameSettings ?? throw new ArgumentNullException(nameof(gameSettings));
             _camera = Camera.main;
         }
 
@@ -44,6 +51,9 @@ namespace CodeBase.Gameplay.Field
         
         private void OnSwipe(int direction)
         {
+            // if (_model.State.CurrentValue != FieldState.Selection)
+            //     return;
+            
             Vector2Int offset = Vector2Int.zero;
             switch (direction)
             {
@@ -61,10 +71,15 @@ namespace CodeBase.Gameplay.Field
                     break;
             }
             _model.MoveCell(offset);
+            
+            if (_runningNormalize.Status.IsCompleted())
+                _runningNormalize = _model.NormalizeAsync().AttachExternalCancellation(View.GetCancellationTokenOnDestroy());
+
         }
 
         private void OnSelectCell(Vector3 point)
         {
+            if(_model.State.CurrentValue != FieldState.Ready) return;
             Vector2 worldPosition = _camera.ScreenToWorldPoint(point);
             RaycastHit2D hit = Physics2D.Raycast(
                 worldPosition, 

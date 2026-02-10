@@ -17,8 +17,6 @@ namespace CodeBase.Gameplay.Field
                 _graphic.sprite = null;
             } else 
                 _graphic.sprite = _sprites[id];
-            if(gameObject.activeSelf)
-                StartCoroutine(Test(callback));
         }
 
         public void DestroyBlock(Action callback = null)
@@ -35,7 +33,7 @@ namespace CodeBase.Gameplay.Field
 
         private IEnumerator Test(Action callback)
         {
-            yield return new WaitForSeconds(3);
+            yield return new WaitForSeconds(1);
             callback?.Invoke();
         }
     }

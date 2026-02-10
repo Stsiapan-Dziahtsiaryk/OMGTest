@@ -8,6 +8,8 @@ namespace CodeBase.Gameplay.Field.Config
     {
         [field: SerializeField] public int ID { get; private set; }
         [field: SerializeField] public AnimatorController Animation { get; private set; }
+        [field: SerializeField] public AnimationClip[] Animations { get; private set;}
+        
         
         [field: Header("Only for debug purposes")]
         [field: SerializeField] public string Name { get; private set; }

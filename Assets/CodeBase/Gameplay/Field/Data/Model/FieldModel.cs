@@ -1,3 +1,4 @@
+using Cysharp.Threading.Tasks;
 using R3;
 using UnityEngine;
 
@@ -51,11 +52,11 @@ namespace CodeBase.Gameplay.Field
             var swap = new CellDto(
                 _grid[index.x, index.y].Type,
                 _grid[index.x, index.y].Position,
-                Cell.State.Move);
+                _grid[index.x, index.y].Type == -1 ? Cell.State.Idle : Cell.State.Move);
             var select = new CellDto(
                 _grid[_selectedCell.x, _selectedCell.y].Type,
                 _grid[_selectedCell.x, _selectedCell.y].Position,
-                Cell.State.Move);
+                _grid[_selectedCell.x, _selectedCell.y].Type == -1 ? Cell.State.Idle : Cell.State.Move);
 
             _grid[_selectedCell.x, _selectedCell.y].Change(swap);
             _grid[index.x, index.y].Change(select);
@@ -70,8 +71,8 @@ namespace CodeBase.Gameplay.Field
         public void OnDoNextCellAction(Vector2Int id)
         {
             GetCell(id.x, id.y).SetState(Cell.State.Idle);
-
-            Normalize();
+                
+            // Normalize();
         }
 
         private bool CanSwap(Vector2Int swapTarget)
@@ -88,9 +89,10 @@ namespace CodeBase.Gameplay.Field
         public void Normalize()
         {
             _state.Value = FieldState.Normalize;
+            Debug.Log("Start normalize.");
 
             if (IsAllCellsIdle() == false) return;
-
+            Debug.Log("All cells idle.");
             Gravity();
             if (_state.Value == FieldState.Gravity) return;
 
@@ -123,7 +125,7 @@ namespace CodeBase.Gameplay.Field
                                 .Change(new CellDto(
                                     -1,
                                     _grid[x, writeY].Position,
-                                    Cell.State.Move));
+                                    Cell.State.Idle));
                             _state.Value = FieldState.Gravity;
                         }
 
@@ -200,7 +202,155 @@ namespace CodeBase.Gameplay.Field
             }
         }
 
-        public bool IsAllCellsIdle()
+        
+        public async UniTask NormalizeAsync()
+        {
+            _state.Value = FieldState.Normalize;
+            Debug.Log("Start normalize.");
+
+            do
+            {
+                if (!IsAllCellsIdle())
+                    await UniTask.WaitUntil(IsAllCellsIdle);
+
+                bool moved = await GravityAsync();
+                if (moved)
+                    await UniTask.WaitUntil(IsAllCellsIdle);
+
+                bool destroyed = await FindMatchesAsync();
+                if (destroyed)
+                    await UniTask.WaitUntil(IsAllCellsIdle);
+
+                // Повторяем, пока что-то происходит
+                if (!moved && !destroyed)
+                    break;
+            }
+            while (true);
+
+            _state.Value = FieldState.Ready;
+        }
+        
+        private async UniTask<bool> GravityAsync()
+        {
+            bool moved = false;
+
+            for (int x = 0; x < Size.x; x++)
+            {
+                int writeY = 0;
+                for (int y = 0; y < Size.y; y++)
+                {
+                    if (_grid[x, y].Type != -1)
+                    {
+                        if (y != writeY)
+                        {
+                            int movingType = _grid[x, y].Type;
+
+                            _grid[x, writeY]
+                                .Change(new CellDto(
+                                    movingType,
+                                    _grid[x, y].Position,
+                                    Cell.State.Move));
+
+                            _grid[x, y]
+                                .Change(new CellDto(
+                                    -1,
+                                    _grid[x, writeY].Position,
+                                    Cell.State.Idle));
+
+                            moved = true;
+                        }
+
+                        writeY++;
+                    }
+                }
+            }
+
+            if (moved)
+            {
+                _state.Value = FieldState.Gravity;
+                // Отдать кадр(ы) системе анимации/презентеру
+                await UniTask.Yield(PlayerLoopTiming.Update);
+            }
+
+            return moved;
+        }
+        
+         private async UniTask<bool> FindMatchesAsync()
+        {
+            bool[,] toDestroy = new bool[Size.x, Size.y];
+            bool anyDestroyed = false;
+
+            // Горизонтальные серии
+            for (int y = 0; y < Size.y; y++)
+            {
+                int runStart = 0;
+                while (runStart < Size.x)
+                {
+                    int t = _grid[runStart, y].Type;
+                    int runEnd = runStart + 1;
+                    while (runEnd < Size.x && _grid[runEnd, y].Type == t && t != -1)
+                        runEnd++;
+
+                    int runLength = runEnd - runStart;
+                    if (t != -1 && runLength >= 3)
+                    {
+                        for (int x = runStart; x < runEnd; x++)
+                            toDestroy[x, y] = true;
+                    }
+
+                    runStart = runEnd;
+                }
+            }
+
+            // Вертикальные серии
+            for (int x = 0; x < Size.x; x++)
+            {
+                int runStart = 0;
+                while (runStart < Size.y)
+                {
+                    int t = _grid[x, runStart].Type;
+                    int runEnd = runStart + 1;
+                    while (runEnd < Size.y && _grid[x, runEnd].Type == t && t != -1)
+                        runEnd++;
+
+                    int runLength = runEnd - runStart;
+                    if (t != -1 && runLength >= 3)
+                    {
+                        for (int y = runStart; y < runEnd; y++)
+                            toDestroy[x, y] = true;
+                    }
+
+                    runStart = runEnd;
+                }
+            }
+
+            // Применяем уничтожение
+            for (int y = 0; y < Size.y; y++)
+            {
+                for (int x = 0; x < Size.x; x++)
+                {
+                    if (toDestroy[x, y])
+                    {
+                        anyDestroyed = true;
+                        _grid[x, y].Change(new CellDto(
+                            -1,
+                            _grid[x, y].Position,
+                            Cell.State.Destroy));
+                    }
+                }
+            }
+
+            if (anyDestroyed)
+            {
+                _state.Value = FieldState.Matches;
+                // Отдать кадр(ы) системе анимации/презентеру
+                await UniTask.Yield(PlayerLoopTiming.Update);
+            }
+
+            return anyDestroyed;
+        }
+        
+        private bool IsAllCellsIdle()
         {
             bool isIdle = false;
 

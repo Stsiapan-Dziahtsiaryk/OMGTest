@@ -63,6 +63,7 @@ namespace CodeBase.Gameplay.Field
                     break;
                 case Cell.State.Destroy:
                     _blockView.DestroyBlock(HandleFinishAction);
+                    // HandleFinishAction();
                     break;
                 case Cell.State.Idle:
                     _blockView.SetBlock(data.Type);
@@ -72,7 +73,10 @@ namespace CodeBase.Gameplay.Field
             }
         }
 
-        private void HandleFinishAction() => Callback?.Invoke(ID);
+        private void HandleFinishAction()
+        {
+            Callback?.Invoke(ID);
+        }
 
         private void Moving(CellDto data)
         {
@@ -95,11 +99,9 @@ namespace CodeBase.Gameplay.Field
                         .DOLocalMove(defaultPos, 0.25f)
                         .OnKill(() =>
                         {
-                            _blockView.SetBlock(data.Type, HandleFinishAction);
+                            HandleFinishAction();
                         });    
             }
-            
-            
         }
     }
 }
