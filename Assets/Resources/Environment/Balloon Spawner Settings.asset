@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8043d75ba9ce44179a2dc14abd61e352, type: 3}
+  m_Name: Balloon Spawner Settings
+  m_EditorClassIdentifier: 
+  <Amount>k__BackingField: 3
+  <MinTimeInterval>k__BackingField: 5
+  <MaxTimeInterval>k__BackingField: 10
+  <HorizontalOffset>k__BackingField: 2
+  <Skins>k__BackingField:
+  - {fileID: 21300000, guid: 8f652f08cacdc4db48441b929b8cde5d, type: 3}
+  - {fileID: 21300000, guid: 181d2e5555e9843d890d80d5c849842b, type: 3}

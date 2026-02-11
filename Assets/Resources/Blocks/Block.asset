@@ -14,4 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <ID>k__BackingField: 0
   <Animation>k__BackingField: {fileID: 9100000, guid: f5c78b361d31f4bc69c3c0ca61622e40, type: 2}
+  <Animations>k__BackingField:
+  - {fileID: 7400000, guid: 0b1ef836f0a8a4696b804407cfae3b6e, type: 2}
+  - {fileID: 7400000, guid: ca53ebed3ae914a5a9cbfbac2f966abf, type: 2}
   <Name>k__BackingField: Fire

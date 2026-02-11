@@ -14,4 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <ID>k__BackingField: 1
   <Animation>k__BackingField: {fileID: 9100000, guid: 2156ae1e896264b88baea56e13aa62f1, type: 2}
+  <Animations>k__BackingField:
+  - {fileID: 7400000, guid: ed54bf32695cc4a5180b35f68e7bc4b7, type: 2}
+  - {fileID: 7400000, guid: c2651d12377944e5cb422b12dcf4c9a3, type: 2}
   <Name>k__BackingField: Water

@@ -7,7 +7,7 @@ namespace CodeBase.Gameplay.Field
     public class BlockView : MonoBehaviour
     {
         [SerializeField] private SpriteRenderer _graphic;
-        [SerializeField] private Sprite[] _sprites;
+        // [SerializeField] private Sprite[] _sprites;
         [SerializeField] private Animator _animator;
 
         private AnimatorOverrideController _overrideController;
@@ -39,20 +39,8 @@ namespace CodeBase.Gameplay.Field
             _overrideController["Destroy"] = clips[1];
         }
         
-        public void SetBlock(int id, Action callback = null)
-        {
-            if(id < 0)
-            {
-                _graphic.sprite = null;
-            } else 
-                _graphic.sprite = _sprites[id];
-        }
-
         public void DestroyBlock(Action callback = null)
         {
-            // _graphic.sprite = null;
-            // if(gameObject.activeSelf)
-            //     StartCoroutine(Test(callback));
             if(_animator.enabled)
                 _animator.SetTrigger("Destroy");
         }
@@ -65,12 +53,6 @@ namespace CodeBase.Gameplay.Field
         public void SetLayer(int layer)
         {
             _graphic.sortingOrder = layer;
-        }
-
-        private IEnumerator Test(Action callback)
-        {
-            yield return new WaitForSeconds(1);
-            callback?.Invoke();
         }
     }
 }

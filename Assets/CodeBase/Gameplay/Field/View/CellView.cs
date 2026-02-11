@@ -52,13 +52,6 @@ namespace CodeBase.Gameplay.Field
             _blockView.Initialize(id.x * (id.y + 1), clips);
         }
         
-        public void Initialize(Vector2Int id, int type)
-        {
-            ID = id;
-            _blockView.SetLayer(id.x * (id.y + 1));
-            _blockView.SetBlock(type);
-        }
-
         public void Selected()
         {
             Selecting?.Invoke(ID);
@@ -74,11 +67,9 @@ namespace CodeBase.Gameplay.Field
                     Moving(data);
                     break;
                 case Cell.State.Destroy:
-                    Debug.Log($"Destroy {ID.x}");
                     _blockView.DestroyBlock(HandleFinishAction);
                     break;
                 case Cell.State.Idle:
-                    Debug.Log($"Idle {ID.x}");
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();

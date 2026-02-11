@@ -60,6 +60,7 @@ namespace CodeBase.Infrastructure.Extensions
         
         protected virtual void DespawnAll(T instance)
         {
+            if(instance == null) return;
             if (instance.gameObject.activeSelf)
                 instance.transform.SetParent(_parent, false);
             instance.gameObject.SetActive(false);

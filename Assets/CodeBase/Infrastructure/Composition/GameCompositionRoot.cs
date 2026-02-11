@@ -1,10 +1,9 @@
 using System;
 using CodeBase.Gameplay.Controller;
+using CodeBase.Gameplay.Environment;
+using CodeBase.Gameplay.Environment.View;
 using CodeBase.Gameplay.Field;
-using CodeBase.Gameplay.Field.Config;
-using CodeBase.Gameplay.Level;
 using CodeBase.UI.HUD;
-using CodeBase.UI.Settings;
 using CodeBase.UI.StateMachine;
 using VContainer;
 using VContainer.Unity;
@@ -28,14 +27,18 @@ namespace CodeBase.Infrastructure.Composition
             _resolver.Resolve<WindowStateMachine>().Clean();
             
             _resolver.Resolve<CellView.Pool>().Start();
+            _resolver.Resolve<BalloonView.Pool>().Start();
+            
             // Register UI Window
             _resolver
                 .Resolve<WindowStateMachine>()
                 .RegisterWindow(WindowType.HUD, _resolver.Resolve<HUDPresenter>().Window);
             
+            
             // Attach presenters            
             _resolver.Resolve<FieldPresenter>().Attach();
             _resolver.Resolve<HUDPresenter>().Attach();
+            _resolver.Resolve<BalloonSpawnerPresenter>().Attach();
         }
 
         public void Start()
@@ -49,6 +52,7 @@ namespace CodeBase.Infrastructure.Composition
         {
             _resolver.Resolve<FieldPresenter>().Dispose();
             _resolver.Resolve<HUDPresenter>().Dispose();
+            _resolver.Resolve<BalloonSpawnerPresenter>().Detach();
         }
     }
 }
