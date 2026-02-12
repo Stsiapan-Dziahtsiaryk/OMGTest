@@ -16,7 +16,6 @@ namespace CodeBase.UI.StateMachine
                 Debug.LogWarning($"Window {key} already registered!");
         }
 
-  
         public void Open(WindowType key, bool pushToHistory = true)
         {
             if(_windows.TryGetValue(key, out var next) == false) return;
@@ -25,7 +24,15 @@ namespace CodeBase.UI.StateMachine
             Close(Current);
             Current = key;
             next?.Open();
-            
+        }
+
+        public void OpenAsStack(WindowType key, bool pushToHistory = true)
+        {
+            if(_windows.TryGetValue(key, out var window) == false) return;
+            if (pushToHistory && Current != WindowType.Invalid)
+                _history.Push(Current);
+            Debug.Log($"OpenAsStack: {key}");
+            window?.Open();
         }
         
         public void Back()
@@ -35,7 +42,7 @@ namespace CodeBase.UI.StateMachine
             Open(prevType, pushToHistory: false);
         }
 
-        public void CloseCurrent()
+        public void CloseAll()
         {
             Close(Current);
             Current = WindowType.Invalid;

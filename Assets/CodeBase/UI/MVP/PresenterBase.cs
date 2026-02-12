@@ -1,5 +1,4 @@
-﻿using System;
-using CodeBase.Shared.MVP;
+﻿using CodeBase.Shared.MVP;
 using CodeBase.UI.StateMachine;
 
 namespace CodeBase.UI.MVP

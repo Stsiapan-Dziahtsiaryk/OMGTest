@@ -34,7 +34,7 @@ namespace CodeBase.Gameplay.Field
 
         public LevelData GetData()
         {
-            if (_grid == null) return default;
+            if (_grid == null || IsFieldCleared()) return default;
             
             Vector2Int size = new Vector2Int(Size.x, Size.y);
             int[] grid = new int[size.x * size.y];

@@ -15,7 +15,8 @@ namespace CodeBase.Gameplay.Environment
         
         private float _width = 0;
         private float _height = 0;
-
+        private bool _isPlaying = false;
+        
         public BalloonSpawner(BalloonSpawnerSettings settings)
         {
             _settings = settings ?? throw new ArgumentNullException(nameof(settings));
@@ -23,7 +24,7 @@ namespace CodeBase.Gameplay.Environment
 
         public event Action<BalloonDto> Spawned;
         
-        public void Start(Vector2 screenSize)
+        public void Initialize(Vector2 screenSize)
         {
             _availableCount = _settings.Amount;
             _interval = _random.Next(_settings.MinTimeInterval, _settings.MaxTimeInterval);
@@ -32,8 +33,14 @@ namespace CodeBase.Gameplay.Environment
             _height = screenSize.y - _settings.VerticalOffset;
         }
 
+        public void Start()
+        {
+            _isPlaying = true;
+        }
+        
         public void FixedTick()
         {
+            if(_isPlaying == false) return;
             if (_interval <= 0)
                 Spawn();
             
@@ -79,6 +86,7 @@ namespace CodeBase.Gameplay.Environment
 
         public void Dispose()
         {
+            _isPlaying = false;
         }
     }
 }

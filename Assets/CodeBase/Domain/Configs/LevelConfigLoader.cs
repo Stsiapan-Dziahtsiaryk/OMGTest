@@ -1,21 +1,40 @@
 using System;
 using System.IO;
 using CodeBase.Gameplay.Field.Config;
+using CodeBase.Gameplay.Level;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Networking;
+using VContainer.Unity;
 
 namespace CodeBase.Domain.Configs
 {
-    public class LevelConfigLoader
+    public class LevelConfigLoader : IInitializable
     {
         private const string FILE_NAME = "Level_";
+        
         private readonly ISerializer _serializer = new JsonSerializer();
+        
+        private string[] _data;
 
+        public LevelConfigLoader(GameSettings settings)
+        {
+            // Временное решение до появления RemoteConfig или другого способа получения данных с сервера
+            _data = new string[settings.LevelAmount];
+        }
+        
+        public async void Initialize()
+        {
+            for (int i = 0; i < _data.Length; i++)
+            {
+                string json = await LoadFromStreamingAssets(i);
+                _data[i] = json;
+            }
+        }
+        
         public LevelData GetData(int id)
         {
-            string json = LoadFromStreamingAssets(id).GetAwaiter().GetResult();
-            return _serializer.Deserialize<LevelData>(json);
+            return _serializer.Deserialize<LevelData>(_data[id]);
         }
         
         private async UniTask<string> LoadFromStreamingAssets(int id)
@@ -35,5 +54,7 @@ namespace CodeBase.Domain.Configs
                 return File.ReadAllText(path);
             }
         }
+
+        
     }
 }

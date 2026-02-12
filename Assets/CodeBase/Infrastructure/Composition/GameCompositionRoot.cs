@@ -106,7 +106,14 @@ namespace CodeBase.Infrastructure.Composition
         private void OnNextLevel(FieldState state)
         {
             if(state == FieldState.Finish)
-                _resolver.Resolve<GameStateMachine>().NextLevel();
+            {
+                _resolver
+                    .Resolve<WindowStateMachine>()
+                    .OpenAsStack(WindowType.Curtain, false);
+                _resolver
+                    .Resolve<GameStateMachine>()
+                    .NextLevel();
+            }
         }
     }
 }

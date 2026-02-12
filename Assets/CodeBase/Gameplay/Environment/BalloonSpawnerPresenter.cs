@@ -26,7 +26,7 @@ namespace CodeBase.Gameplay.Environment
             float width = height * Camera.main.aspect;
 
             _spawner.Spawned += OnSpawn;
-            _spawner.Start(new Vector2(width, height));
+            _spawner.Initialize(new Vector2(width, height));
         }
 
         protected override void OnDetach()

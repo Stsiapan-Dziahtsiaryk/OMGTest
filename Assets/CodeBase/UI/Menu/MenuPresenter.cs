@@ -1,5 +1,6 @@
 ﻿using System;
 using CodeBase.Gameplay.Controller;
+using CodeBase.Gameplay.Environment;
 using CodeBase.UI.MVP;
 using CodeBase.UI.StateMachine;
 
@@ -9,14 +10,17 @@ namespace CodeBase.UI.Menu
     {
         private readonly GameStateMachine _gameMachine;
         private readonly WindowStateMachine _windowStateMachine;
+        private readonly BalloonSpawner _balloonSpawner;
         
         public MenuPresenter(
             MenuView view,
             GameStateMachine gameMachine,
-            WindowStateMachine windowStateMachine) : base(view)
+            WindowStateMachine windowStateMachine, 
+            BalloonSpawner balloonSpawner) : base(view)
         {
             _gameMachine = gameMachine ?? throw new ArgumentNullException(nameof(gameMachine));
             _windowStateMachine = windowStateMachine ?? throw new ArgumentNullException(nameof(windowStateMachine));
+            _balloonSpawner = balloonSpawner ?? throw new ArgumentNullException(nameof(balloonSpawner));
         }
         
         protected override void OnAttach()
@@ -37,7 +41,9 @@ namespace CodeBase.UI.Menu
         private void OnPlayClicked()
         {
             _gameMachine.HandleNewGame();
+            _balloonSpawner.Start();
             _windowStateMachine.Open(WindowType.HUD);            
+            _windowStateMachine.OpenAsStack(WindowType.Curtain, false);
         }
     }
 }

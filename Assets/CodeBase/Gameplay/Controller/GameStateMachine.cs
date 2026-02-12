@@ -3,6 +3,7 @@ using CodeBase.Domain.Configs;
 using CodeBase.Domain.Database;
 using CodeBase.Domain.Database.Data;
 using CodeBase.Domain.Database.Sheets;
+using CodeBase.Gameplay.Environment;
 using CodeBase.Gameplay.Field.Config;
 using CodeBase.Gameplay.Level;
 using R3;

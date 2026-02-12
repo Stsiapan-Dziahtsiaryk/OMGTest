@@ -5,6 +5,6 @@ namespace CodeBase.UI.Curtain
 {
     public class CurtainView : ViewBase
     {
-        
+        public CanvasGroup CanvasGroup => _canvasGroup;
     }
 }
