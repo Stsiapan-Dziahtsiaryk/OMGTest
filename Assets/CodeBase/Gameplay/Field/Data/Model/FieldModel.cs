@@ -1,4 +1,5 @@
 using System;
+using CodeBase.Gameplay.Field.Config;
 using Cysharp.Threading.Tasks;
 using R3;
 using UnityEngine;
@@ -29,6 +30,22 @@ namespace CodeBase.Gameplay.Field
             Size = new Vector2Int(grid.GetLength(0), grid.GetLength(1));
             _grid = grid;
             _state.Value = FieldState.Building;
+        }
+
+        public LevelData GetData()
+        {
+            Vector2Int size = new Vector2Int(Size.x, Size.y);
+            int[] grid = new int[size.x * size.y];
+            for (int x = 0; x < _grid.GetLength(0); x++)
+            {
+                for (int y = 0; y < _grid.GetLength(1); y++)
+                {
+                    int index = y * size.x + x;
+                    grid[index] = _grid[x, y].Type;
+                }
+            }
+            
+            return new LevelData(0, size, grid);
         }
 
         public void OnSelectCell(Vector2Int id)

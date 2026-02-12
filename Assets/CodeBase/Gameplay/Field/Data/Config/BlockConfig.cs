@@ -1,4 +1,3 @@
-using UnityEditor.Animations;
 using UnityEngine;
 
 namespace CodeBase.Gameplay.Field.Config
@@ -7,7 +6,6 @@ namespace CodeBase.Gameplay.Field.Config
     public class BlockConfig : ScriptableObject
     {
         [field: SerializeField] public int ID { get; private set; }
-        [field: SerializeField] public AnimatorController Animation { get; private set; }
         [field: SerializeField] public AnimationClip[] Animations { get; private set;}
         
         

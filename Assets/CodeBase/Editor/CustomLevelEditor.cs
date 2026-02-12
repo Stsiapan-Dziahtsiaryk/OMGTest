@@ -1,8 +1,11 @@
+using System.IO;
+using CodeBase.Domain.Configs;
 using CodeBase.Gameplay.Field.Config;
 using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
+using JsonSerializer = CodeBase.Domain.Configs.JsonSerializer;
 
 namespace CodeBase.Editor
 {
@@ -17,6 +20,9 @@ namespace CodeBase.Editor
         public override VisualElement CreateInspectorGUI()
         {
             VisualElement root = new VisualElement();
+            
+            Button saveBtn = new Button(OnSave) {text = "Save"};
+            root.Add(saveBtn);
             root.Add(new PropertyField(serializedObject.FindProperty("_id"), "ID"));
 
             var size = new PropertyField(serializedObject.FindProperty("_gridSize"), "Size");
@@ -37,6 +43,40 @@ namespace CodeBase.Editor
             
             root.Add(_grid);    
             return root;
+        }
+
+        private void OnSave()
+        {
+            ISerializer serializer = new JsonSerializer();
+            
+            var path = EditorUtility
+                .SaveFilePanel(
+                    "Save Level",
+                    "Assets/StreamingAssets/Levels/",
+                    $"Level_{serializedObject.FindProperty("_id").intValue}.txt", "txt");
+            if (string.IsNullOrEmpty(path))
+                return;
+            
+            var level = new LevelData(
+                serializedObject.FindProperty("_id").intValue,
+                serializedObject.FindProperty("_gridSize").vector2IntValue,
+                GetBlocks()
+            );
+            
+            string json = serializer.Serialize(level);
+            File.WriteAllText(path, json);
+            AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh();
+        }
+
+        private int[] GetBlocks()
+        {
+            var size = serializedObject.FindProperty("_gridSize").vector2IntValue;
+            var grid = serializedObject.FindProperty("_grid");
+            int[] blocks = new int[size.x * size.y];
+            for (int i = 0; i < blocks.Length; i++)
+                blocks[i] = grid.GetArrayElementAtIndex(i).intValue;
+            return blocks;
         }
 
         private void BlockPanel()

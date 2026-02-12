@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 namespace CodeBase.Gameplay.Field.Config

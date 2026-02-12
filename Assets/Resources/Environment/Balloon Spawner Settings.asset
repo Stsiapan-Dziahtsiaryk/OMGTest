@@ -13,9 +13,10 @@ MonoBehaviour:
   m_Name: Balloon Spawner Settings
   m_EditorClassIdentifier: 
   <Amount>k__BackingField: 3
-  <MinTimeInterval>k__BackingField: 5
-  <MaxTimeInterval>k__BackingField: 10
+  <MinTimeInterval>k__BackingField: 3
+  <MaxTimeInterval>k__BackingField: 5
   <HorizontalOffset>k__BackingField: 2
+  <VerticalOffset>k__BackingField: 2
   <Skins>k__BackingField:
   - {fileID: 21300000, guid: 8f652f08cacdc4db48441b929b8cde5d, type: 3}
   - {fileID: 21300000, guid: 181d2e5555e9843d890d80d5c849842b, type: 3}

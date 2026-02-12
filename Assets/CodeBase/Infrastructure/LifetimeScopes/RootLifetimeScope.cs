@@ -1,3 +1,5 @@
+using CodeBase.Domain.Configs;
+using CodeBase.Domain.Database;
 using CodeBase.Gameplay.Controller;
 using CodeBase.Gameplay.Field;
 using CodeBase.Gameplay.Field.Config;
@@ -39,6 +41,10 @@ namespace CodeBase.Infrastructure.LifetimeScopes
             builder.Register<BootstrapState>(Lifetime.Singleton);
             builder.Register<EnterState>(Lifetime.Singleton);
             builder.Register<GameplayState>(Lifetime.Singleton);
+
+            builder.RegisterEntryPoint<DatabaseService>().AsSelf();
+            builder.RegisterEntryPoint<LevelConfigLoader>().AsSelf();
+            
         }
     }
 }
