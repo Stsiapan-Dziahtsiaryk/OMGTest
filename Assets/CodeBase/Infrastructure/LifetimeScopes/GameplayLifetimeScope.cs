@@ -4,7 +4,9 @@ using CodeBase.Gameplay.Environment.View;
 using CodeBase.Gameplay.Field;
 using CodeBase.Infrastructure.Composition;
 using CodeBase.Infrastructure.Extensions;
+using CodeBase.UI.Curtain;
 using CodeBase.UI.HUD;
+using CodeBase.UI.Menu;
 using UnityEngine;
 using VContainer;
 using VContainer.Unity;
@@ -35,6 +37,8 @@ namespace CodeBase.Infrastructure.LifetimeScopes
 
             
             // Views
+            builder.RegisterComponentInHierarchy<CurtainView>();
+            builder.RegisterComponentInHierarchy<MenuView>();
             builder.RegisterComponentInHierarchy<FieldView>();
             builder.RegisterComponentInHierarchy<HUDView>();
             builder.RegisterComponentInHierarchy<BalloonSpawnerView>();
@@ -43,6 +47,8 @@ namespace CodeBase.Infrastructure.LifetimeScopes
             builder.Register<FieldPresenter>(Lifetime.Singleton);
             builder.Register<HUDPresenter>(Lifetime.Singleton);
             builder.Register<BalloonSpawnerPresenter>(Lifetime.Singleton);
+            builder.Register<MenuPresenter>(Lifetime.Singleton);
+            builder.Register<CurtainPresenter>(Lifetime.Singleton);
 
             builder.RegisterEntryPoint<GameCompositionRoot>();
             builder.RegisterEntryPoint<InputService>().AsSelf();

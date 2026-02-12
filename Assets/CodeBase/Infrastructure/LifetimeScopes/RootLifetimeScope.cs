@@ -4,9 +4,8 @@ using CodeBase.Gameplay.Controller;
 using CodeBase.Gameplay.Field;
 using CodeBase.Gameplay.Field.Config;
 using CodeBase.Gameplay.Level;
+using CodeBase.Infrastructure.AppRunner;
 using CodeBase.Infrastructure.Scenes;
-using CodeBase.Infrastructure.StateMachine;
-using CodeBase.Infrastructure.StateMachine.States;
 using CodeBase.UI.StateMachine;
 using UnityEngine;
 using VContainer;
@@ -34,14 +33,9 @@ namespace CodeBase.Infrastructure.LifetimeScopes
             builder.Register<FieldModel>(Lifetime.Singleton);
             builder.Register<LevelBuilder>(Lifetime.Singleton);
             
-            // App state machine core
-            builder.Register<AppStateMachine>(Lifetime.Singleton);
-
-            // States
-            builder.Register<BootstrapState>(Lifetime.Singleton);
-            builder.Register<EnterState>(Lifetime.Singleton);
-            builder.Register<GameplayState>(Lifetime.Singleton);
-
+            // Entry point to start the state machine
+            builder.RegisterEntryPoint<AppStartup>();
+            
             builder.RegisterEntryPoint<DatabaseService>().AsSelf();
             builder.RegisterEntryPoint<LevelConfigLoader>().AsSelf();
             

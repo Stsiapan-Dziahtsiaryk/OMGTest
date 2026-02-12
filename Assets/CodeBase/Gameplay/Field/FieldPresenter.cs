@@ -51,9 +51,6 @@ namespace CodeBase.Gameplay.Field
         
         private void OnSwipe(int direction)
         {
-            // if (_model.State.CurrentValue != FieldState.Selection)
-            //     return;
-            
             Vector2Int offset = Vector2Int.zero;
             switch (direction)
             {
@@ -94,29 +91,11 @@ namespace CodeBase.Gameplay.Field
 
         private void OnHandleState(FieldState state)
         {
-            switch (state)
-            {
-                case FieldState.Invalid:
-                    break;
-                case FieldState.Ready:
-                    break;
-                case FieldState.Building:
+            if (state == FieldState.Building)
                     BuildGrid();
-                    break;
-                case FieldState.Normalize:
-                    break;
-                case FieldState.Rebuilding:
+
+            if (state == FieldState.Rebuilding)
                     ClearGrid();
-                    break;
-                case FieldState.Gravity:
-                    break;
-                case FieldState.Matches:
-                    break;
-                case FieldState.Selection:
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(state), state, null);
-            }
         }
         
         private void BuildGrid()
@@ -138,7 +117,6 @@ namespace CodeBase.Gameplay.Field
                         
                     
                     view.Initialize(new Vector2Int(x, y), clips);
-                    // view.Initialize(new Vector2Int(x,y), cell.Type);
                     view.Selecting += _model.OnSelectCell;
                     view.Callback += cell.SetState;
                     cell.Changed += view.HandleState;

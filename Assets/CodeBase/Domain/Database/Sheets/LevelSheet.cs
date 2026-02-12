@@ -16,7 +16,7 @@ namespace CodeBase.Domain.Database.Sheets
             if (PlayerPrefs.HasKey(KEY))
             {
                 string json = PlayerPrefs.GetString(KEY);
-                Data = _serializer.Deserialize<LevelSnapshot>(PlayerPrefs.GetString(KEY));
+                Data = _serializer.Deserialize<LevelSnapshot>(json);
             }
         }
 
@@ -24,7 +24,6 @@ namespace CodeBase.Domain.Database.Sheets
         public void Save(LevelSnapshot data)
         {
             string compressedJson = _serializer.Serialize(data); 
-            Debug.Log(compressedJson);
             PlayerPrefs.SetString(KEY, compressedJson);
             PlayerPrefs.Save();
         }

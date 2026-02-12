@@ -6,7 +6,6 @@ using CodeBase.Domain.Database.Sheets;
 using CodeBase.Gameplay.Field.Config;
 using CodeBase.Gameplay.Level;
 using R3;
-using UnityEngine;
 
 namespace CodeBase.Gameplay.Controller
 {
@@ -20,6 +19,7 @@ namespace CodeBase.Gameplay.Controller
         private readonly ReactiveProperty<GameState> _state;
 
         private int _currentLevel = 0;
+        private LevelData _currentLevelData;
         
         public GameStateMachine(
             LevelBuilder builder,
@@ -46,18 +46,19 @@ namespace CodeBase.Gameplay.Controller
         public void RestartLevel()
         {
             _state.Value = GameState.Restart;
-            int current = (_currentLevel) % _settings.LevelConfigs.Length;
             
-            _builder.Rebuild(_settings.LevelConfigs[current]);
+            _builder.Rebuild(_currentLevelData);
         }
         
         public void NextLevel()
         {
             _state.Value = GameState.End;
-            _currentLevel++;
-            int current = (_currentLevel) % _settings.LevelConfigs.Length;
             
-            _builder.Rebuild(_configLoader.GetData(current));
+            _currentLevel++;
+            int current = (_currentLevel) % _settings.LevelAmount;
+            
+            _currentLevelData = _configLoader.GetData(current);
+            _builder.Rebuild(_currentLevelData);
             
             _database.GetSheet<PlayerSheet>().Save(new PlayerSnapshot(_currentLevel));
             _database.GetSheet<LevelSheet>().Save(new LevelSnapshot(false, default));
@@ -70,10 +71,11 @@ namespace CodeBase.Gameplay.Controller
         private LevelData GetLevel()
         {
             var levelSnapshot = _database.GetSheet<LevelSheet>().Data;
-            int current = (_currentLevel) % _settings.LevelConfigs.Length;
+            int current = (_currentLevel) % _settings.LevelAmount;
 
             if (levelSnapshot.IsInterrupted)
             {
+                _currentLevelData = _configLoader.GetData(current);
                 return levelSnapshot.Level;
             }
             else

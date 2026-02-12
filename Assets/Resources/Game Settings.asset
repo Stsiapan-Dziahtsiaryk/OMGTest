@@ -15,11 +15,7 @@ MonoBehaviour:
   <StartYPosition>k__BackingField: -8
   <HorizontalMargin>k__BackingField: -2.5
   <ReferenceSizeBlock>k__BackingField: 1.95
-  <ReferenceHMargin>k__BackingField: 0.5
-  <LevelConfigs>k__BackingField:
-  - {fileID: 11400000, guid: 91fcfa715923247339012bd87c818274, type: 2}
-  - {fileID: 11400000, guid: 0f870ca4d3bed4ffbb3c209383c4f643, type: 2}
-  - {fileID: 11400000, guid: 85b3ae5d9d60349de8f08a7f2d6c9f21, type: 2}
+  <LevelAmount>k__BackingField: 3
   <BlockConfigs>k__BackingField:
   - {fileID: 11400000, guid: ad6c096cca3874ad1ae4c5a707d9cdbe, type: 2}
   - {fileID: 11400000, guid: fdd7414d929d545f884a9f53f9e58632, type: 2}

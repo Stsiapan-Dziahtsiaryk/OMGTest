@@ -1,5 +1,4 @@
-﻿using CodeBase.Infrastructure.StateMachine;
-using VContainer;
+﻿using VContainer;
 using VContainer.Unity;
 
 namespace CodeBase.Infrastructure.LifetimeScopes
@@ -8,8 +7,7 @@ namespace CodeBase.Infrastructure.LifetimeScopes
     {
         protected override void Configure(IContainerBuilder builder)
         {
-            // Entry point to start the state machine
-            builder.RegisterEntryPoint<AppStartup>();
+            
         }
     }
 }

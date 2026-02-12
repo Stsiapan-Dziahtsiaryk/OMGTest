@@ -1,5 +1,3 @@
-using System;
-
 namespace CodeBase.Gameplay.Field
 {
     public enum FieldState
@@ -7,10 +5,11 @@ namespace CodeBase.Gameplay.Field
         Invalid = 0,
         Ready = 1,
         Building = 2,
-        Normalize = 3, // divided into 2 states: Gravity and Matches 
+        Normalize = 3, 
         Gravity = 4,
         Matches = 5,
         Selection = 6,
-        Rebuilding,
+        Rebuilding = 7,
+        Finish = 8
     }
 }

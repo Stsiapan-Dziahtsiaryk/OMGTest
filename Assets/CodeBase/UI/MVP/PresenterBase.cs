@@ -37,6 +37,7 @@ namespace CodeBase.UI.MVP
         {
             Window.Opened += HandleShow;
             Window.Closed += HandleHide;
+            View.Hide();
         }
 
         protected virtual void OnDetach()

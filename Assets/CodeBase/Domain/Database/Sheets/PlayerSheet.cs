@@ -23,7 +23,6 @@ namespace CodeBase.Domain.Database.Sheets
         public void Save(PlayerSnapshot data)
         {
             string compressedJson = _serializer.Serialize(data);           
-            Debug.Log(compressedJson);
             PlayerPrefs.SetString(KEY, compressedJson);
             PlayerPrefs.Save();
         }

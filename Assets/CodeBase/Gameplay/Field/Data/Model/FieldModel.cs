@@ -34,6 +34,8 @@ namespace CodeBase.Gameplay.Field
 
         public LevelData GetData()
         {
+            if (_grid == null) return default;
+            
             Vector2Int size = new Vector2Int(Size.x, Size.y);
             int[] grid = new int[size.x * size.y];
             for (int x = 0; x < _grid.GetLength(0); x++)
@@ -122,8 +124,8 @@ namespace CodeBase.Gameplay.Field
                 if (!moved && !destroyed)
                     break;
             } while (true);
-
-            _state.Value = FieldState.Ready;
+            
+            _state.Value = IsFieldCleared() ? FieldState.Finish : FieldState.Ready;
         }
 
         private async UniTask<bool> GravityAsync()
@@ -253,6 +255,17 @@ namespace CodeBase.Gameplay.Field
             return anyDestroyed;
         }
 
+        private bool IsFieldCleared()
+        {
+            bool isClean = false;
+            foreach (var cell in _grid)
+            {
+                isClean = cell.Type == -1;
+                if (isClean == false) break;
+            }
+            return isClean;
+        }
+        
         private bool IsAllCellsIdle()
         {
             bool isIdle = false;
