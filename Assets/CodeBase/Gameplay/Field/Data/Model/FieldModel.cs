@@ -1,4 +1,3 @@
-using System;
 using CodeBase.Gameplay.Field.Config;
 using Cysharp.Threading.Tasks;
 using R3;
@@ -70,39 +69,13 @@ namespace CodeBase.Gameplay.Field
             if (CanSwap(index) == false || isUp)
                 return;
 
-            var swap = new CellDto(
-                _selectedCell,
-                _grid[index.x, index.y].Type,
-                _grid[_selectedCell.x, _selectedCell.y].Position,
-                Cell.State.Move);
-            var select = new CellDto(
-                index,
-                _grid[_selectedCell.x, _selectedCell.y].Type,
-                _grid[index.x, index.y].Position,
-                Cell.State.Move);
-
-            (_grid[_selectedCell.x, _selectedCell.y], _grid[index.x, index.y])
-                = (_grid[index.x, index.y], _grid[_selectedCell.x, _selectedCell.y]);
-
-            _grid[_selectedCell.x, _selectedCell.y].Change(swap);
-            _grid[index.x, index.y].Change(select);
+            SwapCells(_selectedCell, index);
         }
 
         public Cell GetCell(int x, int y) => _grid[x, y];
 
         public void ChangeState(FieldState state)
             => _state.Value = state;
-
-        private bool CanSwap(Vector2Int swapTarget)
-        {
-            bool isValid =
-                swapTarget.x >= 0 &&
-                swapTarget.x < Size.x &&
-                swapTarget.y >= 0 &&
-                swapTarget.y < Size.y;
-
-            return isValid;
-        }
 
         public async UniTask NormalizeAsync()
         {
@@ -128,6 +101,37 @@ namespace CodeBase.Gameplay.Field
             _state.Value = IsFieldCleared() ? FieldState.Finish : FieldState.Ready;
         }
 
+        private void SwapCells(Vector2Int at, Vector2Int to)
+        {
+            var swap = new CellDto(
+                at,
+                _grid[to.x, to.y].Type,
+                _grid[at.x, at.y].Position,
+                Cell.State.Move);
+            var select = new CellDto(
+                to,
+                _grid[at.x, at.y].Type,
+                _grid[to.x, to.y].Position,
+                Cell.State.Move);
+
+            (_grid[at.x, at.y], _grid[to.x, to.y])
+                = (_grid[to.x, to.y], _grid[at.x, at.y]);
+
+            _grid[at.x, at.y].Change(swap);
+            _grid[to.x, to.y].Change(select);
+        }
+        
+        private bool CanSwap(Vector2Int swapTarget)
+        {
+            bool isValid =
+                swapTarget.x >= 0 &&
+                swapTarget.x < Size.x &&
+                swapTarget.y >= 0 &&
+                swapTarget.y < Size.y;
+
+            return isValid;
+        }
+        
         private async UniTask<bool> GravityAsync()
         {
             bool moved = false;
@@ -141,27 +145,8 @@ namespace CodeBase.Gameplay.Field
                     {
                         if (y != writeY)
                         {
-                            (_grid[x, writeY], _grid[x, y]) =
-                                (_grid[x, y], _grid[x, writeY]);
-
-                            var dropping = new CellDto(
-                                new Vector2Int(x, writeY),
-                                _grid[x, writeY].Type,
-                                _grid[x, y].Position,
-                                Cell.State.Move
-                            );
-
-                            var upping = new CellDto(
-                                new Vector2Int(x, y),
-                                _grid[x, y].Type,
-                                _grid[x, writeY].Position,
-                                Cell.State.Move
-                            );
-
-                            _grid[x, writeY].Change(dropping);
-
-                            _grid[x, y].Change(upping);
-
+                            SwapCells(new Vector2Int(x, writeY), new Vector2Int(x, y));
+                            
                             moved = true;
                         }
 

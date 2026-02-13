@@ -33,7 +33,7 @@ namespace CodeBase.Gameplay.Field
         public Vector2Int ID { get; private set; }
 
         public event Action<Vector2Int> Selecting;
-        public event Action<Vector2Int> Callback;
+        public event Action Callback;
 
         private void OnEnable()
         {
@@ -78,7 +78,7 @@ namespace CodeBase.Gameplay.Field
 
         private void HandleFinishAction()
         {
-            Callback?.Invoke(ID);
+            Callback?.Invoke();
         }
 
         private void Moving(CellDto data)
@@ -92,7 +92,7 @@ namespace CodeBase.Gameplay.Field
                     .OnKill(() =>
                     {
                         ID = data.GridPosition;
-                        Callback?.Invoke(data.GridPosition);
+                        Callback?.Invoke();
                     });
         }
     }

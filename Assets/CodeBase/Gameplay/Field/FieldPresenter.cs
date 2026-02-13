@@ -39,6 +39,7 @@ namespace CodeBase.Gameplay.Field
         {
             _model.State.Subscribe(OnHandleState).AddTo(View);
             _inputService.PickEvent += OnSelectCell;
+            _inputService.UpEvent += OnDeselectCell;
             _inputService.Swiped += OnSwipe;
         }
 
@@ -46,6 +47,7 @@ namespace CodeBase.Gameplay.Field
         {
             base.OnDetach();
             _inputService.PickEvent -= OnSelectCell;
+            _inputService.UpEvent -= OnDeselectCell;
             _inputService.Swiped -= OnSwipe;
         }
         
@@ -87,6 +89,16 @@ namespace CodeBase.Gameplay.Field
             {
                 cell.Selected();
             }
+        }
+
+        private void OnDeselectCell()
+        {
+            if(_model.State.CurrentValue == FieldState.Gravity ||
+               _model.State.CurrentValue == FieldState.Normalize ||
+               _model.State.CurrentValue == FieldState.Matches
+               ) return;
+            
+            _model.ChangeState(FieldState.Ready);
         }
 
         private void OnHandleState(FieldState state)
